@@ -38,6 +38,10 @@ html,body{
         0 8px 24px rgba(0,0,0,0.25);
 }
 
+#zet a{
+    color:white;
+}
+
 </style>
 </head>
 
@@ -73,45 +77,18 @@ async function loadZET(){
                 "text/html"
             );
 
-        const bodyText =
-            doc.body.innerText;
-
-        const lines =
-            bodyText
-                .split("\n")
-                .map(
-                    l => l.trim()
-                )
-                .filter(
-                    l => l.length > 25
-                );
+        const alertBox =
+            doc.querySelector(
+                ".warning-content"
+            );
 
         let found =
-            "Nema trenutnih prometnih obavijesti.";
+            "Nema trenutnih obavijesti.";
 
-        for(let line of lines){
+        if(alertBox){
 
-            const lower =
-                line.toLowerCase();
-
-            if(
-
-                lower.includes("zastoj") ||
-                lower.includes("izmjene") ||
-                lower.includes("obilazno") ||
-                lower.includes("prekid") ||
-                lower.includes("kašnjenje") ||
-                lower.includes("radovi") ||
-                lower.includes("sljeme") ||
-                lower.includes("žičare") ||
-                lower.includes("linija")
-
-            ){
-
-                found = line;
-                break;
-
-            }
+            found =
+                alertBox.innerHTML;
 
         }
 
