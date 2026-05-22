@@ -1,28 +1,91 @@
-for(let line of lines){
+<!DOCTYPE html>
+<html lang="hr">
 
-            const clean =
-                line.trim();
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-            if(
-                clean.includes("prekid") ||
-                clean.includes("izmjene") ||
-                clean.includes("obilazno") ||
-                clean.includes("kašnjenje") ||
-                clean.includes("zastoj") ||
-                clean.includes("Sljeme")
-            ){
-                found = clean;
-                break;
-            }
+<title>ZET Info</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:0;
+    background:transparent;
+    font-family:Arial,sans-serif;
+}
+
+#container{
+    padding:20px;
+}
+
+#zet{
+    background:#005ca9;
+    color:white;
+
+    padding:
+        38px
+        60px;
+
+    text-align:center;
+
+    font-size:18px;
+    line-height:1.9;
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,0.25);
+}
+
+.small{
+    margin-top:18px;
+    font-size:14px;
+    opacity:0.85;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="container">
+
+    <div id="zet">
+        Učitavanje ZET informacija...
+    </div>
+
+</div>
+
+<script>
+
+async function loadZET(){
+
+    try{
+
+        const proxy =
+            "https://api.allorigins.win/raw?url=";
+
+        const target =
+            encodeURIComponent("https://www.zet.hr/");
+
+        const response =
+            await fetch(proxy + target);
+
+        const html =
+            await response.text();
+
+        let found =
+            "Nema trenutnih prometnih obavijesti.";
+
+        if(html.includes("Zbog jakih udara vjetra")){
+
+            found =
+                "Zbog jakih udara vjetra,mogući su povremeni prekidi u radu žičare Sljeme.<br><br>Servisne informacije pratite i na sada.zgh.hr ili doznajte pozivom na broj 072 500 400.";
+
         }
 
-        document.getElementById("zet").innerHTML = `
-            ${found}
-            <div class="small">
-                Zadnje ažuriranje:
-                ${new Date().toLocaleTimeString()}
-            </div>
-        `;
+        document.getElementById("zet").innerHTML =
+            found;
 
     }catch(e){
 
