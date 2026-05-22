@@ -1,0 +1,43 @@
+for(let line of lines){
+
+            const clean =
+                line.trim();
+
+            if(
+                clean.includes("prekid") ||
+                clean.includes("izmjene") ||
+                clean.includes("obilazno") ||
+                clean.includes("kašnjenje") ||
+                clean.includes("zastoj") ||
+                clean.includes("Sljeme")
+            ){
+                found = clean;
+                break;
+            }
+        }
+
+        document.getElementById("zet").innerHTML = `
+            ${found}
+            <div class="small">
+                Zadnje ažuriranje:
+                ${new Date().toLocaleTimeString()}
+            </div>
+        `;
+
+    }catch(e){
+
+        document.getElementById("zet").innerHTML =
+            "Greška pri dohvaćanju ZET podataka.";
+
+    }
+
+}
+
+loadZET();
+
+setInterval(loadZET,300000);
+
+</script>
+
+</body>
+</html>
