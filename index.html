@@ -82,8 +82,28 @@ async function loadZET(){
                 ".warning-content"
             );
 
-        const alertBox =
-            alertBoxes[1];
+        let alertBox = null;
+
+        alertBoxes.forEach(box => {
+
+            const text =
+                box.innerText.toLowerCase();
+
+            if(
+
+                text.includes("servisne informacije") ||
+                text.includes("072 500 400") ||
+                text.includes("sada.zgh.hr") ||
+                text.includes("žičare") ||
+                text.includes("sljeme")
+
+            ){
+
+                alertBox = box;
+
+            }
+
+        });
 
         let found =
             "Nema trenutnih obavijesti.";
