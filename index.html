@@ -77,10 +77,13 @@ async function loadZET(){
                 "text/html"
             );
 
-        const alertBox =
-            doc.querySelector(
+        const alertBoxes =
+            doc.querySelectorAll(
                 ".warning-content"
             );
+
+        const alertBox =
+            alertBoxes[1];
 
         let found =
             "Nema trenutnih obavijesti.";
