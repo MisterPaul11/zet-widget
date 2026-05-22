@@ -83,17 +83,51 @@ body{
 
 <script>
 
+async function fetchThroughProxy(urls){
+
+    for(const url of urls){
+
+        try{
+
+            const response =
+                await fetch(url);
+
+            const text =
+                await response.text();
+
+            if(
+                text &&
+                text.length > 1000
+            ){
+
+                return text;
+
+            }
+
+        }catch(e){}
+
+    }
+
+    throw new Error(
+        "All proxies failed"
+    );
+
+}
+
 async function loadZET(){
 
     try{
 
-        const response =
-            await fetch(
-                "https://corsproxy.io/?https://www.zet.hr/"
-            );
-
         const html =
-            await response.text();
+            await fetchThroughProxy([
+
+                "https://corsproxy.io/?https://www.zet.hr/",
+
+                "https://api.allorigins.win/raw?url=https://www.zet.hr/",
+
+                "https://r.jina.ai/http://https://www.zet.hr/"
+
+            ]);
 
         const parser =
             new DOMParser();
