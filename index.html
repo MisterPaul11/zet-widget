@@ -9,15 +9,16 @@
 
 <style>
 
-body{
+html,body{
     margin:0;
     padding:0;
     background:transparent;
+    overflow:hidden;
     font-family:Arial,sans-serif;
 }
 
 #container{
-    padding:20px;
+    padding:16px;
 }
 
 #zet{
@@ -31,16 +32,10 @@ body{
     text-align:center;
 
     font-size:18px;
-    line-height:1.9;
+    line-height:1.8;
 
     box-shadow:
         0 8px 24px rgba(0,0,0,0.25);
-}
-
-.small{
-    margin-top:18px;
-    font-size:14px;
-    opacity:0.85;
 }
 
 </style>
@@ -62,34 +57,72 @@ async function loadZET(){
 
     try{
 
-        const proxy =
-            "https://api.allorigins.win/raw?url=";
-
-        const target =
-            encodeURIComponent("https://www.zet.hr/");
-
-        const response =
-            await fetch(proxy + target);
+        const response = await fetch(
+            "https://corsproxy.io/?https://www.zet.hr/"
+        );
 
         const html =
             await response.text();
 
+        const parser =
+            new DOMParser();
+
+        const doc =
+            parser.parseFromString(
+                html,
+                "text/html"
+            );
+
+        const bodyText =
+            doc.body.innerText;
+
+        const lines =
+            bodyText
+                .split("\n")
+                .map(
+                    l => l.trim()
+                )
+                .filter(
+                    l => l.length > 25
+                );
+
         let found =
             "Nema trenutnih prometnih obavijesti.";
 
-        if(html.includes("Zbog jakih udara vjetra")){
+        for(let line of lines){
 
-            found =
-                "Zbog jakih udara vjetra,mogući su povremeni prekidi u radu žičare Sljeme.<br><br>Servisne informacije pratite i na sada.zgh.hr ili doznajte pozivom na broj 072 500 400.";
+            const lower =
+                line.toLowerCase();
+
+            if(
+
+                lower.includes("zastoj") ||
+                lower.includes("izmjene") ||
+                lower.includes("obilazno") ||
+                lower.includes("prekid") ||
+                lower.includes("kašnjenje") ||
+                lower.includes("radovi") ||
+                lower.includes("sljeme") ||
+                lower.includes("žičare") ||
+                lower.includes("linija")
+
+            ){
+
+                found = line;
+                break;
+
+            }
 
         }
 
-        document.getElementById("zet").innerHTML =
+        document.getElementById("zet")
+            .innerHTML =
             found;
 
     }catch(e){
 
-        document.getElementById("zet").innerHTML =
+        document.getElementById("zet")
+            .innerHTML =
             "Greška pri dohvaćanju ZET podataka.";
 
     }
@@ -98,7 +131,10 @@ async function loadZET(){
 
 loadZET();
 
-setInterval(loadZET,300000);
+setInterval(
+    loadZET,
+    300000
+);
 
 </script>
 
